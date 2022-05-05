@@ -13,10 +13,17 @@ function Main() {
     },
   ]);
 
+  const [clickedCard, setClickedCard] = useState([]);
+  const [score, setScore] = useState(0);
+  const [bestScore, setbestScore] = useState(0);
+
   useEffect(() => {
     setCards(shuffle([...card]));
-    console.log(card);
   }, []);
+
+  useEffect(() => {
+    console.log(clickedCard);
+  }, [clickedCard]);
 
   const shuffle = arra1 => {
     let ctr = arra1.length,
@@ -32,13 +39,31 @@ function Main() {
     return arra1;
   };
 
+  const gameOver = () => {
+    setbestScore(score);
+    setClickedCard([]);
+    setScore(0);
+    alert("You have lost");
+  };
+
   const cardClick = (id, e) => {
     setCards(shuffle([...card]));
+
+    const clicked = card.find(card => card.id === id);
+
+    !clickedCard.includes(clicked)
+      ? setClickedCard(oldArray => [...oldArray, clicked], setScore(score + 1))
+      : gameOver();
   };
 
   return (
     <div>
-      {card.id}
+      <h1>
+        Current score: {score}
+        <br />
+        Best score: {bestScore}
+      </h1>
+
       <Card card={card} cardClick={cardClick} />
     </div>
   );
